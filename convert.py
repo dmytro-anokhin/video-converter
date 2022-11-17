@@ -1,20 +1,18 @@
 #!/usr/bin/python3
+""" Converts videos to HEVC format """
 
 from argparse import ArgumentParser
 from os import listdir, mkdir
 from os.path import isfile, isdir, join, split
-import subprocess
-
-if __name__ != '__main__':
-    raise SystemExit(f'The script "{__name__}" should not be imported')
+from subprocess import run, CalledProcessError
 
 class App:
     """Principal class for the app"""
 
     def __init__(self):
         self.parser = ArgumentParser(
-            prog = 'GoPro Converter',
-            description = 'Convert GoPro videos to HEVC',
+            prog = 'Video Converter',
+            description = 'Convert videos to HEVC format',
             epilog = '')
         self.parser.add_argument('path')
 
@@ -22,7 +20,7 @@ class App:
         """Run the app"""
         args = self.parser.parse_args()
         path = args.path
-        
+
         if isfile(path):
             self.convert(path)
         elif isdir(path):
@@ -31,7 +29,7 @@ class App:
             for file in files:
                 self.convert(file)
         else:
-            raise ValueError(f'"{path}" not a file or a directory')
+            raise ValueError(f'"{path}" no such file')
 
     def convert(self, file):
         """Convert single file"""
@@ -41,17 +39,20 @@ class App:
 
         try:
             mkdir(directory)
-        except:
+        except FileExistsError:
             pass
 
-        subprocess.run([
-            'avconvert',
-            '--source', file,
-            '--output', join(directory, parts[1]),
-            '--preset', 'PresetHEVCHighestQuality',
-            '--progress'
-        ])
+        try:
+            run([
+                'avconvert',
+                '--source', file,
+                '--output', join(directory, parts[1]),
+                '--preset', 'PresetHEVCHighestQuality',
+                '--progress'
+            ], check=True)
+        except CalledProcessError as ex:
+            print(ex)
 
-
-app = App()
-app.run()
+if __name__ == '__main__':
+    app = App()
+    app.run()
