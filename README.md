@@ -1,6 +1,6 @@
 # Video Converter
 
-Video Converter script converts footage to HEVC format.
+Video Converter script batch converts video files to a different format.
 
 Video files produced by modern cameras, mirrorless or action cameras, occupy a lot of space. This is great for editing, but not so much for storing in cloud and viewing on a mobile device.
 
@@ -10,8 +10,17 @@ On macOS you can use `avconvert` to convert individual files. Video Converter sc
 
 ## Usage
 
+You need Python 3 to run it.
+
 ```
 python3 convert.py <path to a file or a directory>
+```
+
+Alternatively you can make `convert.py` executable:
+
+```
+chmod +x convert.py
+./convert.py <path to a file or a directory>
 ```
 
 To store converted files `convert.py` creates `out` directory next to the source files. Original file names and metadata preserved.
