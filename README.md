@@ -14,4 +14,6 @@ On macOS you can use `avconvert` to convert individual files. Video Converter sc
 python3 convert.py <path to a file or a directory>
 ```
 
-Video Converter creates `out` directory next to source files for converted files.
+To store converted files `convert.py` creates `out` directory next to the source files. Original file names and metadata preserved.
+
+`convert.py` uses `PresetHEVCHighestQuality` preset (a high quality preset with HEVC video and AAC audio). You can pass a different preset using `--preset | -p name` option. See `man avconvert` for the list of presets.
