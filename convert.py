@@ -15,23 +15,28 @@ class App:
             description = 'Convert videos to HEVC format',
             epilog = '')
         self.parser.add_argument('path')
+        self.parser.add_argument('-p', '--preset')
 
     def run(self):
         """Run the app"""
         args = self.parser.parse_args()
         path = args.path
+        preset = args.preset
+
+        if preset is None:
+            preset = 'PresetHEVCHighestQuality'
 
         if isfile(path):
-            self.convert(path)
+            self.convert(path, preset)
         elif isdir(path):
             contents = map(lambda name: join(path, name), listdir(path))
             files = [file for file in contents if isfile(file)]
             for file in files:
-                self.convert(file)
+                self.convert(file, preset)
         else:
             raise ValueError(f'"{path}" no such file')
 
-    def convert(self, file):
+    def convert(self, file, preset):
         """Convert single file"""
         print(f'Converting {file}')
         parts = split(file)
@@ -47,7 +52,7 @@ class App:
                 'avconvert',
                 '--source', file,
                 '--output', join(directory, parts[1]),
-                '--preset', 'PresetHEVCHighestQuality',
+                '--preset', preset,
                 '--progress'
             ], check=True)
         except CalledProcessError as ex:
