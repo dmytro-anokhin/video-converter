@@ -53,7 +53,8 @@ class App:
                 '--source', file,
                 '--output', join(directory, parts[1]),
                 '--preset', preset,
-                '--progress'
+                '--progress',
+                '--disableMetadataFilter',
             ], check=True)
         except CalledProcessError as ex:
             print(ex)
